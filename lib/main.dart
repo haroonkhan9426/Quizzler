@@ -9,7 +9,10 @@ class Quizller extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
-          child: QuizPage(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: QuizPage(),
+          ),
         ),
       ),
     );
@@ -17,6 +20,8 @@ class Quizller extends StatelessWidget {
 }
 
 class QuizPage extends StatefulWidget {
+  var scoreTracker = List<Icon>();
+
   @override
   _QuizPageState createState() => _QuizPageState();
 }
@@ -28,11 +33,13 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _renderPage() {
-    return Row(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         _renderText('Question Text here'),
-        _renderButton('True'),
-        _renderButton('False'),
+        _renderButton('True', Colors.green, true),
+        _renderButton('False', Colors.red, false),
       ],
     );
   }
@@ -40,21 +47,45 @@ class _QuizPageState extends State<QuizPage> {
   Widget _renderText(String text) {
     return Expanded(
       flex: 5,
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 25.0,
-          color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 25.0,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _renderButton(String text){
+  Widget _renderButton(String text, Color color, bool buttonType) {
     return Expanded(
-      child: FlatButton(onPressed: (){},
-          child: Text(text)),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: FlatButton(
+          onPressed: (){
+            if(buttonType)
+              print('True Pressed');
+            else
+              print('False Pressed');
+          },
+          child: Text(text),
+          color: color,
+        ),
+      ),
     );
   }
 
+//  _buttonPressed() {
+////    if(buttonType)
+////      print('True Button pressed');
+////    else
+////      print('False Button Pressed');
+////  }
+//    print('Button pressed');
+//  }
 }
