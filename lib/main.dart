@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'models/question.dart';
+import 'mocks/mockdata.dart';
 
 void main() => runApp(Quizller());
 
@@ -20,13 +22,19 @@ class Quizller extends StatelessWidget {
 }
 
 class QuizPage extends StatefulWidget {
-  var scoreTracker = List<Icon>();
 
   @override
   _QuizPageState createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> {
+  var scoreTracker = List<Icon>();
+  var trueIcon = Icon(Icons.done, color: Colors.green);
+  var falseIcon = Icon(Icons.close, color: Colors.red);
+  static List<Question> questions = MockQuestions.fetchQuestions();
+  int count = 0;
+  int length = questions.length;
+
   @override
   Widget build(BuildContext context) {
     return _renderPage();
@@ -40,6 +48,7 @@ class _QuizPageState extends State<QuizPage> {
         _renderText('Question Text here'),
         _renderButton('True', Colors.green, true),
         _renderButton('False', Colors.red, false),
+        _renderIcons(),
       ],
     );
   }
@@ -51,7 +60,8 @@ class _QuizPageState extends State<QuizPage> {
         padding: const EdgeInsets.all(10.0),
         child: Center(
           child: Text(
-            text,
+            questions[count].questionText,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 25.0,
               color: Colors.white,
@@ -67,11 +77,17 @@ class _QuizPageState extends State<QuizPage> {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: FlatButton(
-          onPressed: (){
-            if(buttonType)
-              print('True Pressed');
+          onPressed: () {
+            if (buttonType == questions[count].answer)
+              scoreTracker.add(trueIcon);
             else
-              print('False Pressed');
+              scoreTracker.add(falseIcon);
+            setState(() {
+              if(count == length-1){
+                scoreTracker.clear();
+              }
+              count = (count + 1)%length;
+            });
           },
           child: Text(text),
           color: color,
@@ -80,12 +96,9 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-//  _buttonPressed() {
-////    if(buttonType)
-////      print('True Button pressed');
-////    else
-////      print('False Button Pressed');
-////  }
-//    print('Button pressed');
-//  }
+  _renderIcons(){
+    return Row(
+      children: scoreTracker,
+    );
+  }
 }
