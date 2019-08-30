@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'models/question.dart';
 import 'mocks/mockdata.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() => runApp(Quizller());
 
@@ -84,6 +85,8 @@ class _QuizPageState extends State<QuizPage> {
               scoreTracker.add(falseIcon);
             setState(() {
               if(count == length-1){
+                print('Restarted the app');
+                _showAlert();
                 scoreTracker.clear();
               }
               count = (count + 1)%length;
@@ -94,6 +97,25 @@ class _QuizPageState extends State<QuizPage> {
         ),
       ),
     );
+  }
+
+  _showAlert(){
+    Alert(
+      context: context,
+      type: AlertType.success,
+      title: "Game End",
+      desc: "Click Restart button to restart the game!",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Restart",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          width: 120,
+        )
+      ],
+    ).show();
   }
 
   _renderIcons(){
